@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: go_coffee_shop         # must match the source_name you use later
+    database: g_coffee_shop     # MotherDuck database name
+    schema: main                 # MotherDuck default schema (change if yours is different)
+    tables:
+      - name: menu_items
+      - name: payment_methods
+      - name: stores
+      - name: transaction_items
+      - name: transactions
+      - name: users
+      - name: vouchers

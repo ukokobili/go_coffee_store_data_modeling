@@ -1,0 +1,13 @@
+go_coffee_store_data_modeling:
+  outputs:
+    dev:
+      type: duckdb
+      path: "md:g_coffee_shop?motherduck_token={{ env_var('MOTHERDUCK_TOKEN') }}"
+      threads: 1
+    
+    prod:
+      type: duckdb
+      path: "md:go_coffee_shop_prod?motherduck_token={{ env_var('MOTHERDUCK_TOKEN') }}"
+      threads: 4
+  
+  target: dev
