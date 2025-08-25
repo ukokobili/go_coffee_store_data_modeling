@@ -22,7 +22,8 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-
+vars:
+  "dbt_date:time_zone": "UTC" # Set the timezone for dbt_date package
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
@@ -34,3 +35,10 @@ models:
     # Config indicated by + and applies to all files under models/example/
     staging:
       +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+    bi:
+      +materialized: table
+      +schema: bi
