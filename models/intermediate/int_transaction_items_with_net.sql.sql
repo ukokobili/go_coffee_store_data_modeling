@@ -35,7 +35,7 @@ with
             case
                 when
                     a.voucher_id is not null
-                    and a.txn_date between v.valid_from and v.valid_to
+                    and a.created_at between v.valid_from and v.valid_to
                 then
                     case
                         when v.discount_type = 'percentage'
