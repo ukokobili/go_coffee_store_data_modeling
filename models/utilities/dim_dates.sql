@@ -8,6 +8,9 @@ with
         select
             date_day,
 
+            -- surrogate key
+            {{ dbt_utils.generate_surrogate_key(['date_day']) }} as date_pk,
+
             -- day/weekday/iso-week
             {{ dbt_date.day_of_month("date_day") }} as day_of_month,
             {{ dbt_date.day_name("date_day", short=true) }} as day_of_week,

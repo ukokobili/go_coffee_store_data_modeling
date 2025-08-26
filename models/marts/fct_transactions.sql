@@ -6,11 +6,13 @@ with
     -- derive keys, sequences, customer status, and lifetime value
     aggregation as (
         select
-            {{ dbt_utils.generate_surrogate_key(["user_id"]) }} as user_pk,
-            {{ dbt_utils.generate_surrogate_key(["store_id"]) }} as store_pk,
-            {{ dbt_utils.generate_surrogate_key(["payment_method_id"]) }} as payment_id_pk,
-            {{ dbt_utils.generate_surrogate_key(["voucher_id"]) }} as voucher_pk,
-            created_at,
+            -- surrogate key for this fact table
+            {{ dbt_utils.generate_surrogate_key(['transaction_id']) }} as transaction_pk,
+            {{ dbt_utils.generate_surrogate_key(["user_id"]) }} as user_fk,
+            {{ dbt_utils.generate_surrogate_key(["store_id"]) }} as store_fk,
+            {{ dbt_utils.generate_surrogate_key(["payment_method_id"]) }} as payment_fk,
+            {{ dbt_utils.generate_surrogate_key(["voucher_id"]) }} as voucher_fk,
+            {{ dbt_utils.generate_surrogate_key(["created_at"]) }} as date_fk,
 
             -- sales transaction sequence across the whole business (by time, then id
             -- to break ties)
@@ -37,23 +39,23 @@ with
             -- running customer lifetime value (sum of net over a customer's order
             -- history)
             sum(net_total) over (
-                partition by user_id
-                order by created_at, transaction_id
+                partition by user_id order by created_at, transaction_id
             ) as customer_lifetime_value,
 
             -- first day of sale (first order timestamp for this customer)
             first_value(created_at) over (
-                partition by user_id
-                order by created_at, transaction_id
+                partition by user_id order by created_at, transaction_id
             ) as fdos,
 
             -- carry forward core transaction measures
             gross_total,
             discount_applied,
-            net_total
+            net_total,
+            -- metadata columns
+            current_timestamp as loaded_at
         from int_transactions_aggregated_with_discounts
     )
-    
+
 -- final output of this model (enriched transaction facts)
 select *
 from aggregation

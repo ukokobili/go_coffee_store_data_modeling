@@ -3,7 +3,16 @@ with
 
     renamed as (
 
-        select transaction_id, item_id, quantity, unit_price, subtotal, created_at
+        select
+            -- original columns
+            transaction_id,
+            item_id,
+            quantity,
+            unit_price,
+            subtotal,
+            date(created_at) as created_at,
+            -- metadata columns
+            current_timestamp as loaded_at
 
         from source
 

@@ -4,6 +4,7 @@ with
     renamed as (
 
         select
+            -- original columns
             transaction_id,
             store_id,
             payment_method_id,
@@ -12,7 +13,9 @@ with
             original_amount as gross_total,
             discount_applied,
             final_amount as net_total,
-            created_at
+            date(created_at) as created_at,
+            -- metadata columns
+            current_timestamp as loaded_at
 
         from source
 

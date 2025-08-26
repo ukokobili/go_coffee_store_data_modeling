@@ -4,6 +4,7 @@ with
     renamed as (
 
         select
+            -- original columns
             store_id,
             replace(store_name, 'G Coffee @ USJ 89q', '') as store_name,
             street,
@@ -11,7 +12,9 @@ with
             city,
             state,
             latitude,
-            longitude
+            longitude,
+            -- metadata columns
+            current_timestamp as loaded_at
 
         from source
 
