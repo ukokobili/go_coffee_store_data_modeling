@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized = 'ephemeral',
-    )
-}}
-
 with
     transactions as (select * from {{ ref('stg__transactions') }}),
 

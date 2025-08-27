@@ -11,7 +11,8 @@ with
             registered_at,
             -- metadata columns
             current_timestamp as loaded_at
-    ),
+        from users
+    )
 
 select *
 from add_surrogate_keys

@@ -32,6 +32,7 @@ with
     apply_discounts as (
         select
             a.*,
+
             case
                 when
                     a.voucher_id is not null
