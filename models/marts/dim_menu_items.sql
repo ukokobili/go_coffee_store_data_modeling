@@ -6,10 +6,10 @@ with
             -- surrogate key
             {{ dbt_utils.generate_surrogate_key(['item_id']) }} as item_pk,
             -- original columns
-            item_id,
-            item_name,
-            category,
-            price,
+            item_id, 
+            menu_item_name,
+            menu_category,
+            menu_price,
             is_seasonal,
             available_from,
             available_to,

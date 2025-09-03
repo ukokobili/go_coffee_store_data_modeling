@@ -1,7 +1,5 @@
 with
-    transaction_items as (
-        select * from {{ ref('int_transaction_items_with_net') }}
-    ),
+    transaction_items as (select * from {{ ref('int_transaction_items_with_net') }}),
 
     add_surrogate_keys as (
         select

@@ -8,8 +8,8 @@ with
             method_id,
 
             -- replace underscores with spaces in method_name
-            replace(method_name, '_', ' ') as method_name,
-            category as category,
+            replace(method_name, '_', ' ') as payment_method,
+            category as payment_category,
             -- metadata columns
             current_timestamp as loaded_at
 

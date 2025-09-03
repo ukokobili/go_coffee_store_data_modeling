@@ -19,7 +19,10 @@ with
 
         from source
 
-    )
+    ),
+
+    -- sampled dataset
+    sampled_data as ({{ limit_in_dev("select * from renamed") }})
 
 select *
-from renamed
+from sampled_data
