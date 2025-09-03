@@ -20,12 +20,13 @@ with
             transactions.payment_method_id,
             transactions.voucher_id,
             transactions.user_id,
+            transaction_items.item_id,
 
             -- metrics at transaction grain
             sum(transaction_items.quantity) as quantity,
             sum(transaction_items.subtotal) as gross_total
         from transaction_items
-        left join transactions using (transaction_id) {{ dbt_utils.group_by(n=6) }}
+        left join transactions using (transaction_id) {{ dbt_utils.group_by(n=7) }}
     ),
 
     -- business rule — apply percentage/fixed discounts within valid windows

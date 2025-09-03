@@ -8,8 +8,8 @@ with
 
             -- carry forward original fields
             method_id,
-            method_name,
-            category,
+            payment_method,
+            payment_category,
             -- metadata columns
             current_timestamp as loaded_at
         from payment_methods
