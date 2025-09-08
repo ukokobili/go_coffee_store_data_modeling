@@ -1,14 +1,69 @@
 version: 2
 
 sources:
-  - name: go_coffee_shop         # must match the source_name you use later
-    database: g_coffee_shop     # MotherDuck database name
-    schema: main                 # MotherDuck default schema (change if yours is different)
+  - name: go_coffee_shop
+    description: "Go Coffee Shop main data source for the project."        
+    database: g_coffee_shop     
+    schema: main                
     tables:
       - name: menu_items
+        description: "Menu items available at Go Coffee Shop."
+        columns:
+          - name: item_id
+            description: "Unique identifier for each menu item."
+            data_tests:
+              - unique
+              - not_null
+
       - name: payment_methods
+        description: "Payment methods available at Go Coffee Shop."
+        columns:
+          - name: method_id
+            description: "Unique identifier for each payment method."
+            data_tests:
+              - unique
+              - not_null
+
       - name: stores
+        description: "Stores of Go Coffee Shop."
+        columns:
+          - name: store_id
+            description: "Unique identifier for each store."
+            data_tests:
+              - unique
+              - not_null
+
       - name: transaction_items
+        description: "Items included in each transaction."
+        columns:
+          - name: transaction_id
+            description: "Identifier for the transaction."
+            data_tests:
+              - not_null
+
       - name: transactions
+        description: "Transactions made at Go Coffee Shop."
+        columns:
+          - name: transaction_id
+            description: "Unique identifier for each transaction."
+            data_tests:
+              - unique
+              - not_null
+
       - name: users
+        description: "Users of Go Coffee Shop."
+        columns:
+          - name: user_id
+            description: "Unique identifier for each user."
+            data_tests:
+              - unique
+              - not_null
+
       - name: vouchers
+        description: "Vouchers available at Go Coffee Shop."
+        columns:
+          - name: voucher_id
+            description: "Unique identifier for each voucher."
+            data_tests:
+              - unique
+              - not_null

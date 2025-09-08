@@ -1,0 +1,346 @@
+version: 2
+
+models:
+  - name: stg__menu_items
+    description: "Menu catalog for the coffee shop, used to analyze pricing, product mix, seasonal offers, and popularity of items over time."
+    columns:
+      - name: item_id
+        data_type: bigint
+        description: "Unique key for each menu item."
+        data_tests: 
+          - not_null
+          - unique
+
+      - name: menu_item_name
+        data_type: varchar
+        description: "Customer-facing name of the product."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Espresso', 'Americano', 'Latte', 'Cappuccino', 'Mocha', 'Hot Chocolate', 'Flat White', 'Matcha Latte']
+        
+
+      - name: menu_category
+        data_type: varchar
+        description: "Product category for sales mix analysis."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Coffee', 'Non-Coffee']
+
+      - name: menu_price
+        data_type: double
+        description: "Base selling price of the item."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "menu_price >= 0"
+
+      - name: is_seasonal
+        data_type: boolean
+        description: "Indicates if the product is seasonal or limited-time."
+
+      - name: available_from
+        data_type: integer
+        description: "Start date code for when the item is available."
+
+      - name: available_to
+        data_type: integer
+        description: "End date code for when the item is available."
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded into the warehouse."
+
+  - name: stg__payment_methods
+    description: "List of payment methods used in coffee shop transactions to track customer preferences and digital vs. cash adoption."
+    columns:
+      - name: method_id
+        data_type: bigint
+        description: "Unique payment method key."
+        data_tests: 
+          - not_null
+          - unique
+
+      - name: payment_method
+        data_type: varchar
+        description: "Type of payment method (e.g., Cash, Card, Mobile App)."
+        data_tests: 
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Cash', 'Credit Card', 'Debit Card', 'TNG', 'Grab Pay']
+
+      - name: payment_category
+        data_type: varchar
+        description: "Grouping of payment methods (e.g., Digital, Physical)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Cash', 'Ewallet']
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+
+  - name: stg__stores
+    description: "Coffee shop locations where transactions occur. Used for store-level performance, geographic insights, and expansion analysis."
+    columns:
+      - name: store_id
+        data_type: bigint
+        description: "Unique key for each store."
+        data_tests: 
+          - not_null
+          - unique
+
+      - name: store_name
+        data_type: varchar
+        description: "Name of the store."
+        data_tests: [not_null]
+
+      - name: street
+        data_type: varchar
+        description: "Street address of the store."
+      - name: postal_code
+        data_type: bigint
+        description: "Postal or ZIP code."
+      - name: city
+        data_type: varchar
+        description: "City where the store is located."
+        data_tests: [not_null]
+      - name: state
+        data_type: varchar
+        description: "State or region of the store."
+        data_tests: [not_null]
+
+      - name: latitude
+        data_type: double
+        description: "Latitude for location analysis."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              expression: "latitude IS NULL OR (latitude >= -90 AND latitude <= 90)"
+
+      - name: longitude
+        data_type: double
+        description: "Longitude for location analysis."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              expression: "longitude IS NULL OR (longitude >= -180 AND longitude <= 180)"
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+        data_tests: [not_null]
+
+  - name: stg__transaction_items
+    description: "Line-level detail of items purchased in each transaction, enabling basket analysis, product affinity, and loyalty program impact."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [transaction_id, item_id]
+    columns:
+      - name: transaction_id
+        data_type: varchar
+        description: "Unique identifier linking to the parent transaction."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__transactions')
+              field: transaction_id
+
+      - name: item_id
+        data_type: bigint
+        description: "Menu item purchased in the transaction."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__menu_items')
+              field: item_id
+
+      - name: quantity
+        data_type: bigint
+        description: "Number of units purchased."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "quantity > 0"
+
+      - name: unit_price
+        data_type: double
+        description: "Price charged per unit at time of purchase."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "unit_price >= 0"
+
+      - name: subtotal
+        data_type: double
+        description: "Line total (quantity × unit price)."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "subtotal >= 0 AND ABS(subtotal - (quantity * unit_price)) < 0.01"
+
+      - name: created_at
+        data_type: date
+        description: "Date when the purchase occurred."
+        data_tests: [not_null]
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+        data_tests: [not_null]
+
+  - name: stg__transactions
+    description: "Transaction header capturing order totals, discounts, and loyalty program usage for sales and retention analysis."
+    columns:
+      - name: transaction_id
+        data_type: varchar
+        description: "Unique transaction identifier."
+        data_tests: [not_null, unique]
+
+      - name: store_id
+        data_type: bigint
+        description: "Store where the transaction occurred."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__stores')
+              field: store_id
+
+      - name: payment_method_id
+        data_type: bigint
+        description: "Payment method used for the transaction."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__payment_methods')
+              field: method_id
+
+      - name: voucher_id
+        data_type: varchar
+        description: "Voucher applied to the transaction, if any."
+        data_tests:
+          - relationships:
+              to: ref('stg__vouchers')
+              field: voucher_id
+              where: "voucher_id IS NOT NULL"
+
+      - name: user_id
+        data_type: double
+        description: "Customer who made the purchase, for member vs. non-member analysis."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__users')
+              field: user_id
+
+      - name: gross_total
+        data_type: double
+        description: "Total before discounts."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "gross_total >= 0"
+
+      - name: discount_applied
+        data_type: double
+        description: "Discount value applied to the transaction."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "discount_applied >= 0"
+
+      - name: net_total
+        data_type: double
+        description: "Final amount after discounts, representing actual revenue."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "net_total >= 0 AND net_total = gross_total - discount_applied"
+
+      - name: created_at
+        data_type: date
+        description: "Date of the transaction."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "created_at <= CURRENT_DATE"
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+        data_tests: [not_null]
+
+  - name: stg__users
+    description: "Customer registry enabling loyalty program segmentation, cohort analysis, and demographic profiling."
+    columns:
+      - name: user_id
+        data_type: bigint
+        description: "Unique customer key."
+        data_tests: [not_null, unique]
+
+      - name: gender
+        data_type: varchar
+        description: "Customer gender (self-reported)."
+
+      - name: birthdate
+        data_type: date
+        description: "Customer date of birth for age-based segmentation."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              expression: "birthdate IS NULL OR birthdate <= CURRENT_DATE"
+
+      - name: registered_at
+        data_type: timestamp
+        description: "Date and time the customer joined (e.g., loyalty app signup)."
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+        data_tests: [not_null]
+
+  - name: stg__vouchers
+    description: "Promotional vouchers issued to incentivize purchases and measure discount impact."
+    columns:
+      - name: voucher_id
+        data_type: bigint
+        description: "Unique voucher key."
+        data_tests: [not_null, unique]
+
+      - name: voucher_code
+        data_type: varchar
+        description: "Redeemable code shown to customers."
+        data_tests: [not_null, unique]
+
+      - name: discount_type
+        data_type: varchar
+        description: "Type of discount (e.g., percentage, fixed amount)."
+
+      - name: discount_value
+        data_type: double
+        description: "Discount amount or percentage applied."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "discount_value >= 0"
+
+      - name: valid_from
+        data_type: date
+        description: "Start date for voucher validity."
+        data_tests: [not_null]
+
+      - name: valid_to
+        data_type: date
+        description: "End date for voucher validity."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "valid_from <= valid_to"
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the record was loaded."
+        data_tests: [not_null]
