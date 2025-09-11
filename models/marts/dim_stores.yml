@@ -1,0 +1,43 @@
+models:
+  - name: dim_stores
+    description: ""
+    columns:
+      - name: store_pk
+        data_type: varchar
+        description: ""
+
+      - name: store_id
+        data_type: bigint
+        description: ""
+
+      - name: store_name
+        data_type: varchar
+        description: ""
+
+      - name: street
+        data_type: varchar
+        description: ""
+
+      - name: postal_code
+        data_type: bigint
+        description: ""
+
+      - name: city
+        data_type: varchar
+        description: ""
+
+      - name: state
+        data_type: varchar
+        description: ""
+
+      - name: latitude
+        data_type: double
+        description: ""
+
+      - name: longitude
+        data_type: double
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""

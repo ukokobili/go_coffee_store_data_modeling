@@ -1,0 +1,55 @@
+models:
+  - name: fct_transactions_items
+    description: ""
+    columns:
+      - name: transaction_fk
+        data_type: varchar
+        description: ""
+
+      - name: user_fk
+        data_type: varchar
+        description: ""
+
+      - name: store_fk
+        data_type: varchar
+        description: ""
+
+      - name: payment_fk
+        data_type: varchar
+        description: ""
+
+      - name: item_fk
+        data_type: varchar
+        description: ""
+
+      - name: voucher_fk
+        data_type: varchar
+        description: ""
+
+      - name: date_fk
+        data_type: varchar
+        description: ""
+
+      - name: transaction_id
+        data_type: varchar
+        description: ""
+
+      - name: quantity
+        data_type: hugeint
+        description: ""
+
+      - name: gross_total
+        data_type: double
+        description: ""
+
+      - name: discount_amount
+        data_type: double
+        description: ""
+
+      - name: net_total
+        data_type: double
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""

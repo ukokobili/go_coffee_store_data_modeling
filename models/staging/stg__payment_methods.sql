@@ -7,9 +7,28 @@ with
             -- rename columns to be more friendly
             method_id,
 
-            -- replace underscores with spaces in method_name
-            replace(method_name, '_', ' ') as payment_method,
-            category as payment_category,
+            -- original column name is 'category', but renaming to 'payment_method'
+            -- for clarity
+            case
+                when method_name = 'credit_card'
+                then 'Credit Card'
+                when method_name = 'debit_card'
+                then 'Debit Card'
+                when method_name = 'tng'
+                then 'TNG'
+                when method_name = 'grabpay'
+                then 'Grab Pay'
+                else 'Cash'
+            end as payment_method,
+
+            -- categorize payment methods into broader categories
+            case
+                when category = 'cash'
+                then 'Cash'
+                when category = 'card'
+                then 'Card'
+                else 'E-wallet'
+            end as payment_category,
             -- metadata columns
             current_timestamp as loaded_at
 
