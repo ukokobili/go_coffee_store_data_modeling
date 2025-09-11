@@ -7,7 +7,9 @@ with
             -- original columns
             item_id,
             item_name as menu_item_name,
-            category as menu_category,
+            case
+                when category = 'coffee' then 'Coffee' else 'Non-Coffee'
+            end as menu_category,
             price as menu_price,
             is_seasonal,
             available_from,

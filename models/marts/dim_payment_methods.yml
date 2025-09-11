@@ -1,0 +1,23 @@
+models:
+  - name: dim_payment_methods
+    description: ""
+    columns:
+      - name: payment_pk
+        data_type: varchar
+        description: ""
+
+      - name: method_id
+        data_type: bigint
+        description: ""
+
+      - name: payment_method
+        data_type: varchar
+        description: ""
+
+      - name: payment_category
+        data_type: varchar
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""

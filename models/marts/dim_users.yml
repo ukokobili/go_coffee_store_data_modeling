@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "Customer dimension capturing demographics and registration info. Supports loyalty segmentation, cohort analysis, and retention studies."
+    columns:
+      - name: user_pk
+        data_type: varchar
+        description: "Surrogate primary key for each user."
+        tests: [not_null, unique]
+
+      - name: user_id
+        data_type: bigint
+        description: "Business key from the source system identifying each customer."
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg__users')
+              field: user_id
+
+      - name: gender
+        data_type: varchar
+        description: "Customer gender, useful for demographic and marketing analysis."
+        tests:
+          - accepted_values:
+              values: ['Male', 'Female', 'Other']
+              quote: true
+
+      - name: birthdate
+        data_type: date
+        description: "Customer date of birth, used for age segmentation and loyalty targeting."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "birthdate IS NULL OR birthdate <= CURRENT_DATE"
+
+      - name: registered_at
+        data_type: timestamp
+        description: "Timestamp when the customer registered (e.g., loyalty program signup)."
+        tests: [not_null]
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "ETL load timestamp for audit and lineage tracking."
+        tests: [not_null]

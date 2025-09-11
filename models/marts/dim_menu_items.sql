@@ -6,7 +6,7 @@ with
             -- surrogate key
             {{ dbt_utils.generate_surrogate_key(['item_id']) }} as item_pk,
             -- original columns
-            item_id, 
+            item_id,
             menu_item_name,
             menu_category,
             menu_price,
@@ -19,3 +19,4 @@ with
     )
 select *
 from add_surrogate_keys
+

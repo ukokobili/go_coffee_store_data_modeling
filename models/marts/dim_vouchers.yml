@@ -1,0 +1,35 @@
+models:
+  - name: dim_vouchers
+    description: ""
+    columns:
+      - name: voucher_pk
+        data_type: varchar
+        description: ""
+
+      - name: voucher_id
+        data_type: bigint
+        description: ""
+
+      - name: voucher_code
+        data_type: varchar
+        description: ""
+
+      - name: discount_type
+        data_type: varchar
+        description: ""
+
+      - name: discount_value
+        data_type: double
+        description: ""
+
+      - name: valid_from
+        data_type: date
+        description: ""
+
+      - name: valid_to
+        data_type: date
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""

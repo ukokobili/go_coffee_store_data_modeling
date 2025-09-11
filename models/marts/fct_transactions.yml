@@ -1,0 +1,67 @@
+models:
+  - name: fct_transactions
+    description: ""
+    columns:
+      - name: transaction_pk
+        data_type: varchar
+        description: ""
+
+      - name: user_fk
+        data_type: varchar
+        description: ""
+
+      - name: store_fk
+        data_type: varchar
+        description: ""
+
+      - name: payment_fk
+        data_type: varchar
+        description: ""
+
+      - name: voucher_fk
+        data_type: varchar
+        description: ""
+
+      - name: date_fk
+        data_type: varchar
+        description: ""
+
+      - name: transaction_seq
+        data_type: bigint
+        description: ""
+
+      - name: customer_sales_seq
+        data_type: bigint
+        description: ""
+
+      - name: nvsr
+        data_type: varchar
+        description: ""
+
+      - name: customer_lifetime_value
+        data_type: double
+        description: ""
+
+      - name: fdos
+        data_type: date
+        description: ""
+
+      - name: quantity
+        data_type: hugeint
+        description: ""
+
+      - name: gross_total
+        data_type: double
+        description: ""
+
+      - name: discount_applied
+        data_type: double
+        description: ""
+
+      - name: net_total
+        data_type: double
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""

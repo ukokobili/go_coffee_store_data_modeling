@@ -1,0 +1,39 @@
+models:
+  - name: dim_menu_items
+    description: ""
+    columns:
+      - name: item_pk
+        data_type: varchar
+        description: ""
+
+      - name: item_id
+        data_type: bigint
+        description: ""
+
+      - name: menu_item_name
+        data_type: varchar
+        description: ""
+
+      - name: menu_category
+        data_type: varchar
+        description: ""
+
+      - name: menu_price
+        data_type: double
+        description: ""
+
+      - name: is_seasonal
+        data_type: boolean
+        description: ""
+
+      - name: available_from
+        data_type: integer
+        description: ""
+
+      - name: available_to
+        data_type: integer
+        description: ""
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: ""
