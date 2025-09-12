@@ -1,67 +1,117 @@
 models:
   - name: fct_transactions
-    description: ""
+    description: "Fact table that records each customer transaction, including details about the user, store, payment method, discounts, and calculated totals."
     columns:
       - name: transaction_pk
         data_type: varchar
-        description: ""
+        description: "Primary key that uniquely identifies each transaction record in the warehouse."
+        tests:
+          - not_null
+          - unique
 
       - name: user_fk
         data_type: varchar
-        description: ""
+        description: "Foreign key referencing the customer (user) who performed the transaction."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_users')
+              field: user_pk
 
       - name: store_fk
         data_type: varchar
-        description: ""
+        description: "Foreign key referencing the store where the transaction took place."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_stores')
+              field: store_pk
 
       - name: payment_fk
         data_type: varchar
-        description: ""
+        description: "Foreign key referencing the payment method used for the transaction."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_payment_methods')
+              field: payment_pk
 
       - name: voucher_fk
         data_type: varchar
-        description: ""
+        description: "Foreign key referencing the voucher applied to the transaction, if any."
+        tests:
+          - relationships:
+              to: ref('dim_vouchers')
+              field: voucher_pk
 
       - name: date_fk
         data_type: varchar
-        description: ""
+        description: "Foreign key referencing the date dimension for the transaction date."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: date_pk
 
       - name: transaction_seq
         data_type: bigint
-        description: ""
+        description: "Sequential identifier for transactions, often used for ordering or deduplication."
+        tests:
+          - not_null
 
       - name: customer_sales_seq
         data_type: bigint
-        description: ""
+        description: "Sequential counter of sales at the customer level, useful for tracking repeat purchases."
 
       - name: nvsr
         data_type: varchar
-        description: ""
+        description: "Normalized value sales reference or identifier, used for reconciliation and reporting."
 
       - name: customer_lifetime_value
         data_type: double
-        description: ""
+        description: "Cumulative total value of all transactions made by the customer up to this point."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
 
       - name: fdos
         data_type: date
-        description: ""
+        description: "First date of sale (FDOS) for the customer, marking the start of their purchase history."
 
       - name: quantity
         data_type: hugeint
-        description: ""
+        description: "Number of items purchased in the transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
 
       - name: gross_total
         data_type: double
-        description: ""
+        description: "Total monetary value of the transaction before discounts."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
 
       - name: discount_applied
         data_type: double
-        description: ""
+        description: "Total discount amount applied to the transaction."
+        tests:
+          - accepted_values:
+              values: [">=0"]
 
       - name: net_total
         data_type: double
-        description: ""
+        description: "Final total value of the transaction after applying discounts."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
 
       - name: loaded_at
         data_type: timestamp with time zone
-        description: ""
+        description: "Timestamp indicating when the record was loaded into the warehouse."
+        tests:
+          - not_null

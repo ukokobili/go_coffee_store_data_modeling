@@ -1,39 +1,65 @@
+version: 2
+
 models:
   - name: dim_menu_items
-    description: ""
+    description: "Dimension table containing all coffee shop menu items, including pricing, category, and seasonal availability. Supports analysis of product popularity, category performance, seasonal trends, and loyalty-driven purchases."
     columns:
       - name: item_pk
         data_type: varchar
-        description: ""
+        description: "Surrogate primary key for each menu item record."
+        data_tests:
+          - not_null
+          - unique
 
       - name: item_id
         data_type: bigint
-        description: ""
+        description: "Business key from the source system uniquely identifying each menu item."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg__menu_items')
+              field: item_id
 
       - name: menu_item_name
         data_type: varchar
-        description: ""
+        description: "Name of the menu item as displayed to customers (e.g., 'Latte', 'Blueberry Muffin')."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Espresso', 'Americano', 'Latte', 'Cappuccino', 'Mocha', 'Hot Chocolate', 'Flat White', 'Matcha Latte']
 
       - name: menu_category
         data_type: varchar
-        description: ""
+        description: "Category of the menu item enables category-level sales and inventory analysis."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Coffee', 'Non-Coffee']
 
       - name: menu_price
         data_type: double
-        description: ""
+        description: "Standard price of the menu item. Used to calculate transaction totals and analyze pricing strategies."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg__menu_items')
+              field: menu_price
 
       - name: is_seasonal
         data_type: boolean
-        description: ""
+        description: "Flag indicating if the item is seasonal (e.g., 'Pumpkin Spice Latte'). Used for analyzing seasonal demand and marketing impact."
 
       - name: available_from
         data_type: integer
-        description: ""
+        description: "Month (1–12) when the seasonal menu item becomes available. Null for non-seasonal items."
 
       - name: available_to
         data_type: integer
-        description: ""
+        description: "Month (1–12) when the seasonal menu item is no longer available. Null for non-seasonal items."
 
       - name: loaded_at
         data_type: timestamp with time zone
-        description: ""
+        description: "ETL load timestamp for audit and lineage tracking."

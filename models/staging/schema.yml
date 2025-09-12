@@ -20,7 +20,6 @@ models:
               arguments:
                 values: ['Espresso', 'Americano', 'Latte', 'Cappuccino', 'Mocha', 'Hot Chocolate', 'Flat White', 'Matcha Latte']
         
-
       - name: menu_category
         data_type: varchar
         description: "Product category for sales mix analysis."
