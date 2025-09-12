@@ -1,55 +1,110 @@
+version: 2
+
 models:
   - name: fct_transactions_items
-    description: ""
+    description: "Fact table at the transaction-item grain, capturing item-level sales, discounts, and totals. Supports analysis of basket composition, revenue, loyalty program impact, and product performance across time, stores, and payment methods."
     columns:
       - name: transaction_fk
         data_type: varchar
-        description: ""
+        description: "Surrogate foreign key referencing the transaction dimension."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_transactions')
+              field: transaction_pk
 
       - name: user_fk
         data_type: varchar
-        description: ""
-
+        description: "Surrogate foreign key referencing the user dimension, linking purchases to customer demographics and loyalty status."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_users')
+              field: user_pk
+      
       - name: store_fk
         data_type: varchar
-        description: ""
-
+        description: "Surrogate foreign key referencing the store dimension, enabling store-level performance analysis."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_stores')
+              field: store_pk
+      
       - name: payment_fk
         data_type: varchar
-        description: ""
-
+        description: "Surrogate foreign key referencing the payment method dimension, supporting analysis of customer payment preferences."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_payment_methods')
+              field: payment_pk
+     
       - name: item_fk
         data_type: varchar
-        description: ""
-
+        description: "Surrogate foreign key referencing the menu item dimension, providing product-level insights."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_menu_items')
+              field: item_pk
+     
       - name: voucher_fk
         data_type: varchar
-        description: ""
-
+        description: "Surrogate foreign key referencing the voucher dimension, capturing discount application at the item level."
+        tests:
+          - relationships:
+              to: ref('dim_vouchers')
+              field: voucher_pk
+     
       - name: date_fk
         data_type: varchar
-        description: ""
-
+        description: "Foreign key linking to the date dimension, supporting time-series sales analysis."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: date_pk
+     
       - name: transaction_id
         data_type: varchar
-        description: ""
-
+        description: "Business key from the source system uniquely identifying each transaction."
+        tests:
+          - not_null
+      
       - name: quantity
         data_type: hugeint
-        description: ""
-
+        description: "Number of units of the item purchased in the transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
+      
       - name: gross_total
         data_type: double
-        description: ""
-
+        description: "Total before discounts for the item(s) in the transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
+     
       - name: discount_amount
         data_type: double
-        description: ""
-
+        description: "Discount applied to the item(s), if any, from vouchers or loyalty offers."
+        tests:
+          - accepted_values:
+              values: [">=0"]
+      
       - name: net_total
         data_type: double
-        description: ""
+        description: "Final amount paid after discounts. Should equal gross_total - discount_amount."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
 
       - name: loaded_at
         data_type: timestamp with time zone
-        description: ""
+        description: "ETL load timestamp for audit and lineage tracking."
+        tests:
+          - not_null

@@ -1,23 +1,43 @@
+version: 2
+
 models:
   - name: dim_payment_methods
-    description: ""
+    description: "Dimension table containing details of available payment methods. Supports analysis of customer payment preferences, adoption of digital wallets, and operational insights into transaction processing."
     columns:
       - name: payment_pk
         data_type: varchar
-        description: ""
+        description: "Surrogate primary key for each payment method."
+        data_tests: 
+          - not_null
+          - unique
 
       - name: method_id
         data_type: bigint
-        description: ""
+        description: "Business key from the source system identifying the payment method."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg__payment_methods')
+              field: method_id
 
       - name: payment_method
         data_type: varchar
-        description: ""
+        description: "Specific payment method used by the customer (e.g., 'Credit Card', 'Mobile App Wallet', 'Cash')."
+        data_tests: 
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Cash', 'Credit Card', 'Debit Card', 'TNG', 'Grab Pay']
 
       - name: payment_category
         data_type: varchar
-        description: ""
+        description: "Category grouping for the payment method (e.g., 'Digital', 'Card', 'Cash'). Enables high-level analysis of payment trends."
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Cash', 'Card', 'E-wallet']
 
       - name: loaded_at
         data_type: timestamp with time zone
-        description: ""
+        description: "ETL load timestamp for audit and lineage tracking."

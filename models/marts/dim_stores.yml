@@ -1,43 +1,56 @@
+version: 2
+
 models:
   - name: dim_stores
-    description: ""
+    description: "Store dimension containing location and identity details for each coffee shop branch. Enables geographic sales analysis, regional performance comparisons, and customer behavior segmentation by store."
     columns:
       - name: store_pk
         data_type: varchar
-        description: ""
+        description: "Surrogate primary key for each store."
+        data_tests:
+          - not_null
+          - unique
 
       - name: store_id
         data_type: bigint
-        description: ""
+        description: "Business key identifying the store from the source system."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg__stores')
+              field: store_id
 
       - name: store_name
         data_type: varchar
-        description: ""
+        description: "Official name of the coffee shop branch (e.g., 'Downtown Cafe')."
+        data_tests: 
+          - not_null
 
       - name: street
         data_type: varchar
-        description: ""
+        description: "Street address of the store location."
 
       - name: postal_code
         data_type: bigint
-        description: ""
+        description: "Postal/ZIP code for the store’s location."
 
       - name: city
         data_type: varchar
-        description: ""
+        description: "City where the store is located."
 
       - name: state
         data_type: varchar
-        description: ""
+        description: "State or region where the store operates."
 
       - name: latitude
         data_type: double
-        description: ""
+        description: "Latitude coordinate for the store, enabling mapping and geospatial analysis."
 
       - name: longitude
         data_type: double
-        description: ""
+        description: "Longitude coordinate for the store, enabling mapping and geospatial analysis."
 
       - name: loaded_at
         data_type: timestamp with time zone
-        description: ""
+        description: "ETL load timestamp for audit and lineage tracking."
