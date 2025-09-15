@@ -1,0 +1,22 @@
+unit_tests:
+  - name: test_payment_methods_logic
+    model: stg__payment_methods
+
+    given:
+      - input: source('go_coffee_shop', 'payment_methods')
+        rows:
+          - { method_id: 1, method_name: "credit_card" }
+          - { method_id: 2, method_name: "debit_card" }
+          - { method_id: 3, method_name: "tng" }
+          - { method_id: 4, method_name: "grabpay" }
+          - { method_id: 5, method_name: "cash" }
+          - { method_id: 6, method_name: "random_other" }
+
+    expect:
+      rows:
+        - { method_id: 1, payment_method: "credit_card", payment_method: "Credit Card" }
+        - { method_id: 2, payment_method: "debit_card",  payment_method: "Debit Card" }
+        - { method_id: 3, payment_method: "tng",         payment_method: "TNG" }
+        - { method_id: 4, payment_method: "grabpay",     payment_method: "Grab Pay" }
+        - { method_id: 5, payment_method: "cash",        payment_method: "Cash" }
+        - { method_id: 6, payment_method: "random_other", payment_method: "Cash" }

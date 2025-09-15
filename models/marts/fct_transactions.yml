@@ -5,7 +5,7 @@ models:
       - name: transaction_pk
         data_type: varchar
         description: "Primary key that uniquely identifies each transaction record in the warehouse."
-        tests:
+        data_tests:
           - not_null
           - unique
 

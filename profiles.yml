@@ -1,13 +1,19 @@
 go_coffee_store_data_modeling:
   outputs:
     dev:
-      type: duckdb
-      path: "md:g_coffee_shop?motherduck_token={{ env_var('MOTHERDUCK_TOKEN') }}"
-      threads: 1
+      type: bigquery
+      method: service-account
+      project: go-coffee-project
+      dataset: dev
+      threads: 4
+      keyfile: /home/ai_nerd/google_credential/go-coffee.json
     
     prod:
-      type: duckdb
-      path: "md:go_coffee_shop_prod?motherduck_token={{ env_var('MOTHERDUCK_TOKEN') }}"
+      type: bigquery
+      method: service-account
+      project: go-coffee-project
+      dataset: analytics
       threads: 4
+      keyfile: /home/ai_nerd/google_credential/go-coffee.json
   
   target: dev

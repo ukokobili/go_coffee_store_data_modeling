@@ -1,0 +1,137 @@
+version: 2
+
+models:
+  - name: rpt_transaction_items_wide
+    description: "Reporting model at the transaction-item grain. Provides detailed sales, customer, store, and item-level attributes for analysis of basket composition, menu performance, loyalty program usage, and payment behavior."
+    columns:
+      - name: transaction_fk
+        data_type: varchar
+        description: "Foreign key referencing the transaction fact table."
+
+      - name: date_fk
+        data_type: varchar
+        description: "Foreign key referencing the date dimension for transaction date."
+
+      - name: item_fk
+        data_type: varchar
+        description: "Foreign key referencing the menu item dimension."
+
+      - name: year
+        data_type: bigint
+        description: "Calendar year of the transaction date."
+
+      - name: month_name
+        data_type: varchar
+        description: "Name of the month for reporting purposes (e.g., 'January')."
+
+      - name: iso_week
+        data_type: integer
+        description: "ISO week number of the transaction date."
+
+      - name: iso_weekday
+        data_type: integer
+        description: "ISO weekday number (1=Monday, 7=Sunday)."
+
+      - name: year_month
+        data_type: varchar
+        description: "Concatenated year and month for easy reporting (e.g., '2025-01')."
+
+      - name: store_name
+        data_type: varchar
+        description: "Name of the store where the transaction occurred."
+
+      - name: street
+        data_type: varchar
+        description: "Street address of the store."
+
+      - name: postal_code
+        data_type: bigint
+        description: "Postal code of the store’s location."
+
+      - name: city
+        data_type: varchar
+        description: "City where the store is located."
+
+      - name: state
+        data_type: varchar
+        description: "State or region of the store location."
+
+      - name: latitude
+        data_type: double
+        description: "Latitude coordinate of the store."
+
+      - name: longitude
+        data_type: double
+        description: "Longitude coordinate of the store."
+
+      - name: payment_method
+        data_type: varchar
+        description: "Customer’s selected payment method for the transaction."
+
+      - name: payment_category
+        data_type: varchar
+        description: "High-level grouping of the payment method (e.g., 'Card', 'Cash', 'E-Wallet')."
+
+      - name: item_id
+        data_type: bigint
+        description: "Business key for the menu item from the source system."
+
+      - name: menu_item_name
+        data_type: varchar
+        description: "Name of the menu item purchased."
+
+      - name: menu_category
+        data_type: varchar
+        description: "Category of the menu item (e.g., 'Drinks', 'Entrees')."
+
+      - name: menu_price
+        data_type: double
+        description: "Base listed price of the menu item."
+
+      - name: is_seasonal
+        data_type: boolean
+        description: "Flag indicating if the item is seasonal (true/false)."
+
+      - name: user_id
+        data_type: bigint
+        description: "Business key referencing the customer (user)."
+
+      - name: gender
+        data_type: varchar
+        description: "Gender of the customer."
+
+      - name: birthdate
+        data_type: date
+        description: "Date of birth of the customer."
+
+      - name: registered_at
+        data_type: timestamp
+        description: "Timestamp when the customer registered."
+
+      - name: voucher_code
+        data_type: varchar
+        description: "Voucher code applied to the item purchase."
+
+      - name: discount_type
+        data_type: varchar
+        description: "Type of discount applied (e.g., percentage, fixed amount)."
+
+      - name: quantity
+        data_type: hugeint
+        description: "Quantity of the item purchased."
+
+      - name: gross_total
+        data_type: double
+        description: "Gross amount before discounts for the item(s)."
+
+      - name: discount_amount
+        data_type: double
+        description: "Total discount applied at the item level."
+
+      - name: net_total
+        data_type: double
+        description: "Final item total after discounts."
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "ETL load timestamp for audit and lineage."

@@ -19,4 +19,3 @@ with
     )
 select *
 from add_surrogate_keys
-
