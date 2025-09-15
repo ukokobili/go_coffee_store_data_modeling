@@ -1,0 +1,12 @@
+# Model YAML
+# Reference documentation: https://docs.rilldata.com/reference/project-files/models
+
+type: model
+materialize: true
+
+connector: motherduck
+
+dsn: "md:go_coffee_shop_prod"
+sql: |
+  select * from go_coffee_shop_prod.main_marts.fct_transactions_items
+token: "{{ .env.connector.motherduck.token }}"

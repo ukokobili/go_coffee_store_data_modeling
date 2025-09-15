@@ -1,0 +1,138 @@
+version: 2
+
+models:
+  - name: rpt_transactions_wide
+    description: "Reporting model at the transaction grain. Provides order-level data with customer, store, payment, voucher, and aggregated financial metrics for sales analysis and customer insights."
+    columns:
+      - name: transaction_pk
+        data_type: varchar
+        description: "Primary key uniquely identifying each transaction."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: date_fk
+        data_type: varchar
+        description: "Foreign key referencing the date dimension for transaction date."
+        data_tests:
+          - not_null
+
+      - name: year
+        data_type: bigint
+        description: "Calendar year of the transaction."
+
+      - name: month_name
+        data_type: varchar
+        description: "Month name of the transaction (e.g., 'January')."
+
+      - name: iso_week
+        data_type: integer
+        description: "ISO week number for the transaction date."
+
+      - name: iso_weekday
+        data_type: integer
+        description: "ISO weekday number (1=Monday, 7=Sunday)."
+
+      - name: year_month
+        data_type: varchar
+        description: "Concatenated year-month (e.g., '2025-01')."
+
+      - name: store_name
+        data_type: varchar
+        description: "Name of the store where the transaction occurred."
+
+      - name: street
+        data_type: varchar
+        description: "Street address of the store."
+
+      - name: postal_code
+        data_type: bigint
+        description: "Postal code of the store."
+
+      - name: city
+        data_type: varchar
+        description: "City of the store."
+
+      - name: state
+        data_type: varchar
+        description: "State or region of the store."
+
+      - name: latitude
+        data_type: double
+        description: "Latitude coordinate of the store."
+
+      - name: longitude
+        data_type: double
+        description: "Longitude coordinate of the store."
+
+      - name: payment_method
+        data_type: varchar
+        description: "Payment method used in the transaction."
+
+      - name: payment_category
+        data_type: varchar
+        description: "Grouped payment category (e.g., Card, Cash)."
+
+      - name: user_id
+        data_type: bigint
+        description: "Business key of the customer making the purchase."
+
+      - name: gender
+        data_type: varchar
+        description: "Gender of the customer."
+
+      - name: birthdate
+        data_type: date
+        description: "Date of birth of the customer."
+
+      - name: registered_at
+        data_type: timestamp
+        description: "Customer registration timestamp."
+
+      - name: voucher_code
+        data_type: varchar
+        description: "Voucher code applied to the order."
+
+      - name: discount_type
+        data_type: varchar
+        description: "Type of discount applied to the transaction."
+
+      - name: transaction_seq
+        data_type: bigint
+        description: "Sequential identifier for the transaction."
+
+      - name: customer_sales_seq
+        data_type: bigint
+        description: "Sequential sales number at the customer level."
+
+      - name: customer_lifetime_value
+        data_type: double
+        description: "Cumulative value of purchases made by the customer up to this transaction."
+
+      - name: nvsr
+        data_type: varchar
+        description: "Normalized value sales reference used for reconciliation."
+
+      - name: fdos
+        data_type: date
+        description: "First date of sale for the customer."
+
+      - name: quantity
+        data_type: hugeint
+        description: "Total number of items purchased in the order."
+
+      - name: gross_total
+        data_type: double
+        description: "Gross total amount before discounts at the order level."
+
+      - name: discount_applied
+        data_type: double
+        description: "Discount amount applied at the order level."
+
+      - name: net_total
+        data_type: double
+        description: "Final order total after discounts."
+
+      - name: loaded_at
+        data_type: timestamp with time zone
+        description: "Timestamp when the order record was loaded into the warehouse."

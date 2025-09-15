@@ -37,12 +37,6 @@ with
                 else 'return'
             end as nvsr,
 
-            -- running customer lifetime value (sum of net over a customer's order
-            -- history)
-            sum(net_total) over (
-                partition by user_id order by created_at, transaction_id
-            ) as customer_lifetime_value,
-
             -- first day of sale (first order timestamp for this customer)
             first_value(created_at) over (
                 partition by user_id order by created_at, transaction_id

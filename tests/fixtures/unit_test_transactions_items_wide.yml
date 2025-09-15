@@ -1,0 +1,44 @@
+unit_tests:
+  - name: test_rpt_transaction_items_wide_net_total
+    model: rpt_transaction_items_wide
+
+    given:
+      - input: ref('fct_transactions_items')
+        rows:
+          - { transaction_fk: "tx1", date_fk: "20240901", store_fk: "store1", payment_fk: "pay1", user_fk: "user1", voucher_fk: "v1", item_fk: "item1", quantity: 2, gross_total: 10.0, discount_amount: 2.0, net_total: 8.0 }
+          - { transaction_fk: "tx2", date_fk: "20240902", store_fk: "store2", payment_fk: "pay2", user_fk: "user2", voucher_fk: "v2", item_fk: "item2", quantity: 1, gross_total: 10.0, discount_amount: 0.0, net_total: 10.0 }
+
+      - input: ref('dim_dates')
+        rows:
+          - { date_pk: "20240901", date_day: "2024-09-01" }
+          - { date_pk: "20240902", date_day: "2024-09-02" }
+
+      - input: ref('dim_stores')
+        rows:
+          - { store_pk: "store1", store_name: "Store A" }
+          - { store_pk: "store2", store_name: "Store B" }
+
+      - input: ref('dim_payment_methods')
+        rows:
+          - { payment_pk: "pay1", payment_method: "Credit Card", payment_category: "Offline" }
+          - { payment_pk: "pay2", payment_method: "Cash", payment_category: "Offline" }
+
+      - input: ref('dim_users')
+        rows:
+          - { user_pk: "user1", user_id: "U1" }
+          - { user_pk: "user2", user_id: "U2" }
+
+      - input: ref('dim_vouchers')
+        rows:
+          - { voucher_pk: "v1", voucher_code: "DISC10" }
+          - { voucher_pk: "v2", voucher_code: "DISC0" }
+
+      - input: ref('dim_menu_items')
+        rows:
+          - { item_pk: "item1", menu_item_name: "Latte", menu_price: 5.0 }
+          - { item_pk: "item2", menu_item_name: "Espresso", menu_price: 10.0 }
+
+    expect:
+      rows:
+        - { item_fk: "item1", quantity: 2, gross_total: 10.0, discount_amount: 2.0, net_total: 8.0 }
+        - { item_fk: "item2", quantity: 1, gross_total: 10.0, discount_amount: 0.0, net_total: 10.0 }

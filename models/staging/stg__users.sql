@@ -5,7 +5,7 @@ with
         select
             -- original columns
             user_id,
-            gender,
+            initcap(gender) as gender,
             birthdate,
             registered_at,
             -- metadata columns

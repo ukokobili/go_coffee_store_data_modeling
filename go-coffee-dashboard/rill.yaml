@@ -1,0 +1,13 @@
+compiler: rillv1
+
+display_name: Go Coffee Shop Dashboard
+
+# The project's default OLAP connector.
+# Learn more: https://docs.rilldata.com/reference/olap-engines
+olap_connector: duckdb
+
+# These are example mock users to test your security policies.
+# Learn more: https://docs.rilldata.com/manage/security
+mock_users:
+- email: ukokobili.jacob@gmail.com
+- email: ukokobili.jacob@gmail.com
