@@ -5,7 +5,7 @@ with
 
         select
             -- rename columns to be more friendly
-            method_id,
+            cast(method_id as string) as method_id,
 
             -- original column name is 'category', but renaming to 'payment_method'
             -- for clarity

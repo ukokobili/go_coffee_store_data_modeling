@@ -5,7 +5,7 @@ with
 
         select
             -- original columns
-            item_id,
+            cast(item_id as string) as item_id,
             item_name as menu_item_name,
             case
                 when category = 'coffee' then 'Coffee' else 'Non-Coffee'

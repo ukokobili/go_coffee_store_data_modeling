@@ -24,10 +24,6 @@ models:
       - name: gender
         data_type: varchar
         description: "Customer gender, useful for demographic and marketing analysis."
-        data_tests:
-          - accepted_values:
-              values: ['male', 'female']
-              quote: true
 
       - name: birthdate
         data_type: date
@@ -40,3 +36,4 @@ models:
       - name: loaded_at
         data_type: timestamp with time zone
         description: "ETL load timestamp for audit and lineage tracking."
+

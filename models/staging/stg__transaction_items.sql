@@ -6,7 +6,7 @@ with
         select
             -- original columns
             transaction_id,
-            item_id,
+            cast(item_id as string) as item_id,
             quantity,
             unit_price,
             subtotal,

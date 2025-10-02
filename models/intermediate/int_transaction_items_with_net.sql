@@ -18,7 +18,7 @@ with
             transactions.transaction_id,
             transactions.store_id,
             transactions.payment_method_id,
-            cast(transactions.voucher_id as int64) as voucher_id,
+            transactions.voucher_id,
             transactions.user_id,
             transaction_items.item_id,
 
@@ -33,6 +33,7 @@ with
     apply_discounts as (
         select
             a.*,
+
             case
                 when
                     a.voucher_id is not null
