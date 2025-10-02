@@ -2,7 +2,7 @@
 
 with
     -- build date rows from 2023-07-01 to 2025-12-31
-    date_spine as ({{ dbt_date.get_date_dimension("2024-05-31", "2025-07-31") }}),
+    date_spine as ({{ dbt_date.get_date_dimension("2023-07-01", "2025-07-01") }}),
 
     date_formatting as (
         select

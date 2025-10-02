@@ -5,7 +5,7 @@ with
 
         select
             -- original columns
-            voucher_id,
+            cast(voucher_id as string) as voucher_id,
             voucher_code,
             discount_type,
             discount_value,

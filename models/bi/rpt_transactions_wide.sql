@@ -27,6 +27,7 @@ select
     sales.date_fk,
 
     -- date attrs
+    dates.date_day as txn_date,
     dates.year,
     dates.month_name,
     dates.iso_week,

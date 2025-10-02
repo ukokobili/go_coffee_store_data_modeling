@@ -5,8 +5,8 @@ with
 
         select
             -- original columns
-            store_id,
-            replace(store_name, 'G Coffee @ USJ 89q', '') as store_name,
+            cast(store_id as string) as store_id,
+            initcap(replace(store_name, 'G Coffee @', '')) as store_name,
             street,
             postal_code,
             city,
