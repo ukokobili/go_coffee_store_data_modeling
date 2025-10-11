@@ -11,11 +11,18 @@ gen:
 # git commit, push, and pull requests
 
 push:
-	git checkout -B feature/jacob_feature
-	@read -p "Enter commit message: " msg; \
+	@read -p "Enter branch name: " branch; \
+	if git show-ref --verify --quiet refs/heads/$$branch; then \
+		echo "Branch '$$branch' exists. Switching to it..."; \
+		git checkout $$branch; \
+	else \
+		echo "Branch '$$branch' does not exist. Creating new branch..."; \
+		git checkout -b $$branch; \
+	fi; \
+	read -p "Enter commit message: " msg; \
 	git add .; \
 	git commit -m "$$msg"; \
-	git push origin feature/jacob_feature
+	git push origin $$branch
 
 pull:
 	git checkout main && git pull origin main
